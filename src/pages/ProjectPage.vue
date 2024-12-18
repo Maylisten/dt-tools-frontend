@@ -1,12 +1,9 @@
 <template>
-  <div>Home</div>
+  <ProjectList/>
 </template>
 
 <script setup lang="ts">
-import {$axios} from "@/utils/axios.ts";
-
-$axios.get("/test/test");
-
+import ProjectList from "@/components/project/ProjectList.vue";
 </script>
 
 <style scoped lang="less"></style>

@@ -1,18 +1,19 @@
 <template>
-  <div class="h-screen w-screen flex flex-col">
-    <div class="h-20 shadow border-b-gray-400 border-2">
+  <div class="h-screen w-screen flex flex-col" v-loading="loading">
+    <div class="h-16 shadow border-b-gray-400 border-2">
       <HeaderBar/>
     </div>
     <div class="flex-1 ">
       <div class="flex flex-row h-full">
-        <transition enter-active-class="animate__animated animate__fadeInLeft"
-                    leave-active-class="animate__animated animate__fadeOutLeft">
-          <div v-if="sidebarShow" class="h-full w-[300px] shadow">
-            <SideBarMenu/>
+        <div v-if="sidebarShow" class="h-full w-[300px] shadow">
+          <SideBarMenu/>
+        </div>
+        <div class="h-full flex-1 bg-gray-100  relative">
+          <div class="absolute top-0 left-0 h-full w-full overflow-hidden">
+            <el-scrollbar>
+              <slot></slot>
+            </el-scrollbar>
           </div>
-        </transition>
-        <div class="h-full flex-1 bg-gray-300">
-          <slot></slot>
         </div>
       </div>
     </div>
@@ -27,7 +28,7 @@ import HeaderBar from "@/components/HeaderBar.vue";
 
 const layoutStore = useLayoutStore();
 const {setSidebarShow} = layoutStore;
-const {sidebarShow} = storeToRefs(layoutStore);
+const {sidebarShow, loading} = storeToRefs(layoutStore);
 setSidebarShow(true);
 
 </script>

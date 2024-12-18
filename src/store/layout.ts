@@ -7,8 +7,20 @@ export const useLayoutStore = defineStore("layout", () => {
     sidebarShow.value = value;
   };
 
+  const loading = ref(false);
+  const beginLoading = () => {
+    loading.value = true;
+  };
+
+  const endLoading = () => {
+    loading.value = false;
+  };
+
   return {
     sidebarShow,
-    setSidebarShow
+    setSidebarShow,
+    loading,
+    beginLoading,
+    endLoading
   };
 });
