@@ -13,6 +13,7 @@
     "fix": "eslint . --fix"
   },
   "dependencies": {
+    "@antv/x6": "^2.18.1",
     "animate.css": "^4.1.1",
     "axios": "^1.7.9",
     "element-plus": "^2.9.1",

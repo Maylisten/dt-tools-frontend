@@ -8,6 +8,7 @@ import {useLayoutStore, useProjectStore} from "@/store";
 import {createPinia, setActivePinia} from "pinia";
 import DataProcessManagePage from "@/pages/process/DataProcessManagePage.vue";
 import DataProcessFlowPage from "@/pages/process/DataProcessFlowPage.vue";
+import TestPage from "@/pages/TestPage.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
   {path: '/', redirect: "/project"},
@@ -18,6 +19,7 @@ const routes: Readonly<RouteRecordRaw[]> = [
   {path: "/render", component: RenderPage},
   {path: "/simulation", component: SimulationPage},
   {path: "/control", component: ControlPage},
+  {path: "/test", component: TestPage},
 ];
 
 export const router = createRouter({
