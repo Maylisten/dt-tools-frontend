@@ -14,12 +14,19 @@
   },
   "dependencies": {
     "@antv/x6": "^2.18.1",
+    "@types/wicg-file-system-access": "^2023.10.5",
+    "@vueuse/core": "^12.0.0",
     "animate.css": "^4.1.1",
     "axios": "^1.7.9",
     "element-plus": "^2.9.1",
+    "idb-keyval": "^6.2.1",
+    "loadash": "^1.0.0",
     "pinia": "^2.2.2",
+    "three": "^0.171.0",
+    "three-stdlib": "^2.35.2",
     "uuid": "^11.0.3",
     "vue": "^3.4.37",
+    "vue-draggable-plus": "^0.6.0",
     "vue-router": "^4.4.3"
   },
   "devDependencies": {
@@ -27,6 +34,7 @@
     "@babel/eslint-parser": "^7.25.1",
     "@eslint/js": "^10.0.0",
     "@types/node": "^22.5.4",
+    "@types/three": "^0.171.0",
     "@vitejs/plugin-vue": "^5.1.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",

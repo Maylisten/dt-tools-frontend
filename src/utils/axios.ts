@@ -20,3 +20,8 @@ export function get<T>(url: string): Promise<T> {
 export function post<T>(url: string, ...args: unknown[]): Promise<T> {
   return $axios.post<Message<T>>(url, ...args).then(res => res.data.data);
 }
+
+// 简化的 DELETE 请求方法
+export function del<T>(url: string, data?: unknown): Promise<T> {
+  return $axios.delete<Message<T>>(url, { data }).then((res) => res.data.data);
+}

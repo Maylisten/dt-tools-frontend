@@ -10,9 +10,7 @@
         </div>
         <div class="h-full flex-1 bg-gray-100  relative">
           <div class="absolute top-0 left-0 h-full w-full overflow-hidden">
-            <el-scrollbar>
-              <slot></slot>
-            </el-scrollbar>
+            <slot></slot>
           </div>
         </div>
       </div>
