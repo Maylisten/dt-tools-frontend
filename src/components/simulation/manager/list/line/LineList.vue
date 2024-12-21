@@ -6,6 +6,9 @@
       <span>线</span>
       <AddButton class="ml-auto" @click="enterLineEditingMode"/>
     </div>
+    <div v-if="lines.length!==0" class="flex flex-col p-2 gap-2">
+      <LineItem v-for="line of lines" :key="line.id" :data="line"/>
+    </div>
   </div>
 </template>
 
@@ -13,9 +16,12 @@
 
 import AddButton from "@/components/simulation/manager/list/AddButton.vue";
 import {useSimulationStore} from "@/store";
+import {storeToRefs} from "pinia";
+import LineItem from "@/components/simulation/manager/list/line/LineItem.vue";
 import LineIcon from "@/components/icons/LineIcon.vue";
 
 const simulationStore = useSimulationStore();
+const {lines} = storeToRefs(simulationStore);
 const {enterLineEditingMode} = simulationStore;
 
 </script>

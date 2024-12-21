@@ -46,7 +46,7 @@ export const useSimulationStore = defineStore("simulation", () => {
   };
 
   const createArea = (positions: [number, number, number][]) => {
-    areas.value.push({id: uuid(), label: "新建线", positions, availability: _.cloneDeep(interval.value)});
+    areas.value.push({id: uuid(), label: "新建面", positions, availability: _.cloneDeep(interval.value)});
   };
 
   return {

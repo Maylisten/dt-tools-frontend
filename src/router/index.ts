@@ -1,6 +1,5 @@
 import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router';
 import ProjectPage from "@/pages/ProjectPage.vue";
-import ModelPage from "@/pages/ModelPage.vue";
 import RenderPage from "@/pages/RenderPage.vue";
 import SimulationPage from "@/pages/SimulationPage.vue";
 import ControlPage from "@/pages/ControlPage.vue";
@@ -9,6 +8,7 @@ import {createPinia, setActivePinia} from "pinia";
 import DataProcessManagePage from "@/pages/process/DataProcessManagePage.vue";
 import DataProcessFlowPage from "@/pages/process/DataProcessFlowPage.vue";
 import TestPage from "@/pages/TestPage.vue";
+import ModelPage from "@/pages/ModelPage/ModelPage.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
   {path: '/', redirect: "/project"},

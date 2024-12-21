@@ -9,7 +9,7 @@
       <div class="absolute pointer-events-none h-full w-full top-0 left-0 z-10">
         <Point v-for="point of points" :key="point.id" :data="point"/>
         <Line v-for="line of lines" :key="line.id" :data="line"/>
-        <Area v-for="area of areas" :key="area.id"/>
+        <Area v-for="area of areas" :key="area.id" :data="area"/>
       </div>
     </div>
     <div :id="cesiumContainerId" class="absolute h-full w-full top-0 left-0 z-10"></div>
