@@ -1,0 +1,8 @@
+{
+  "short_name": "Fire Particle",
+  "name": "CG Course: Fire Particle System",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

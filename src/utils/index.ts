@@ -103,3 +103,6 @@ export function replaceFileName(fileName: string, newName: string): string {
   return extensionMatch ? `${newName}${extensionMatch[0]}` : newName;
 }
 
+export function getUrlByRelativePath(relativePath: string): string {
+  return import.meta.env.VITE_APP_BASE_URL + relativePath;
+}

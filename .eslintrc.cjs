@@ -41,6 +41,7 @@ module.exports = {
         "semi": ["error", "always"], // 强制使用分号
         'vue/multi-word-component-names': 'off', // 要求组件名称始终为 “-” 链接的单词
         "@typescript-eslint/no-unused-vars": process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "globals": {
         "FileSystemEntry": true,

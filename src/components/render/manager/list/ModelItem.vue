@@ -48,7 +48,7 @@ const {removeModel} = renderStore;
 const props = defineProps<{ value: Model }>();
 const {value: model} = toRefs(props);
 
-const isExpand = ref(true);
+const isExpand = ref(false);
 
 const onDelete = () => {
   removeModel(model.value);

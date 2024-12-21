@@ -17,9 +17,8 @@ let scene = shallowRef<BaseScene | undefined>();
 
 onMounted(() => {
   scene.value = new BaseScene(container.value!);
+  provide("scene", scene.value);
 });
-
-provide("scene", scene);
 
 onUnmounted(() => {
   if (scene.value) {

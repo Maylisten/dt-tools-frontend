@@ -1,16 +1,23 @@
 export type GlbConfig = {
   url: string;
   position: [number, number, number];
+  rotation: [number, number, number];
+  size: number;
 }
 
 export type GltfConfig = {
   url: string;
   position: [number, number, number];
+  rotation: [number, number, number];
+  size: number;
 }
 
 export type ObjConfig = {
-  url: string;
+  objUrl: string;
+  mtlUrl: string;
   position: [number, number, number];
+  rotation: [number, number, number];
+  size: number;
 }
 
 export type FlameConfig = {
@@ -43,6 +50,6 @@ export enum ModelType {
 export interface Model {
   id: string;
   name: string;
-  type: string;
+  type: ModelType;
   config: ModelConfig
 }

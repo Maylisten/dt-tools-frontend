@@ -27,20 +27,27 @@ export const MODEL_DEFAULT_CONFIG: ModelConfigMap = {
   [ModelType.GLB]: {
     url: "",
     position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    size: 1,
   } as GlbConfig,
   [ModelType.GLTF]: {
     url: "",
     position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    size: 1,
   } as GltfConfig,
   [ModelType.OBJ]: {
-    url: "",
+    objUrl: "",
+    mtlUrl: "",
     position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    size: 1,
   } as ObjConfig,
   [ModelType.FLAME]: {
     position: [0, 0, 0],
   } as FlameConfig,
   [ModelType.WATER]: {
-    size: [50, 50],
+    size: [5, 5],
     position: [0, 0, 0],
   } as WaterConfig,
 };

@@ -2,6 +2,7 @@ import {ref, watch} from "vue";
 import {convertToPlainObject} from "@/utils";
 import {listRenderModels, setAllRenderModels} from "@/api/render.ts";
 import {Model} from "@/types/Model.ts";
+import _ from "lodash";
 
 export function useModels(projectId: string) {
   const data = ref<Model[]>([]);
@@ -11,9 +12,12 @@ export function useModels(projectId: string) {
     }
   });
 
-  watch(data, async (newData) => {
+  watch(data, _.debounce(async (newData) => {
     await setAllRenderModels(projectId, convertToPlainObject(newData));
-  }, {deep: true});
+  }, 500, {
+    'leading': false,
+    'trailing': true
+  }), {deep: true});
 
   return data;
 }

@@ -3,7 +3,7 @@ import {Model} from "@/types/Model.ts";
 
 export async function uploadFile(basePath: string, name: string, file: File) {
   const uploadUrl = '/upload/file';
-  console.log("upload file", `${basePath}/${name}`);
+  // console.log("upload file", `${basePath}/${name}`);
   const formData = new FormData();
   formData.append('basePath', basePath);
   formData.append('name', name);
@@ -17,7 +17,7 @@ export async function uploadFile(basePath: string, name: string, file: File) {
 
 export async function uploadDirectory(basePath: string, name: string) {
   const uploadUrl = '/upload/directory';
-  console.log("upload directory", `${basePath}/${name}`);
+  // console.log("upload directory", `${basePath}/${name}`);
   return await post(uploadUrl, {basePath, name});
 }
 

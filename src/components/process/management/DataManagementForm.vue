@@ -31,7 +31,7 @@ const fetchFiles = async () => {
       }, 5000);
     });
 
-    console.log("当前项目 ID:", currentProjectId.value);
+    // console.log("当前项目 ID:", currentProjectId.value);
 
     // 从后端获取文件列表
     const result = await Promise.race([
@@ -39,7 +39,7 @@ const fetchFiles = async () => {
       timeoutPromise,
     ]);
 
-    console.log("后端返回的数据:", result);
+    // console.log("后端返回的数据:", result);
 
     // 确保后端返回的结果符合预期
     if (result && result.status === "ok" && Array.isArray(result.data)) {

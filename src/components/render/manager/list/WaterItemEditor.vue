@@ -24,13 +24,13 @@
         <el-input-number v-model="(model.config as WaterConfig).size[0]" :precision="2" :step="0.1"
                          controls-position="right">
           <template #prefix>
-            <span>x:</span>
+            <span>长:</span>
           </template>
         </el-input-number>
         <el-input-number v-model="(model.config as WaterConfig).size[1]" :precision="2" :step="0.1"
                          controls-position="right">
           <template #prefix>
-            <span>y:</span>
+            <span>宽:</span>
           </template>
         </el-input-number>
       </div>
