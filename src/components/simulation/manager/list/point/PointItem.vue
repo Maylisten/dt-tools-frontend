@@ -6,18 +6,18 @@
       </template>
       <template #content>
         <el-form>
-          <el-form-item label="起始时间" class="p-2" style="margin-bottom: 0">
+          <el-form-item label="出现时间" class="p-2" style="margin-bottom: 0">
             <el-date-picker
                 v-model="data.availability[0]"
                 type="datetime"
-                placeholder="选择起始时间"
+                placeholder="选择出现时间"
             />
           </el-form-item>
-          <el-form-item label="结束时间" class="p-2" style="margin-bottom: 0">
+          <el-form-item label="消失时间" class="p-2" style="margin-bottom: 0">
             <el-date-picker
                 v-model="data.availability[1]"
                 type="datetime"
-                placeholder="选择结束时间"
+                placeholder="选择消失时间"
             />
           </el-form-item>
         </el-form>
