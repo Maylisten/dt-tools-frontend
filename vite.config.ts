@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import {resolve} from 'path';
 import eslint from "vite-plugin-eslint";
 import glsl from 'vite-plugin-glsl';
+import cesium from 'vite-plugin-cesium';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,7 +27,8 @@ export default defineConfig({
       defaultExtension: 'glsl', // Shader suffix when no extension is specified
       compress: false, // Compress output shader code
       root: '/',
-    })
+    }),
+    cesium()
   ],
   resolve: {
     alias: {
