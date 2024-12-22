@@ -8,3 +8,7 @@ export async function listProjects() {
 export async function addProject(name: string) {
   return post<Project>("/project/add", {name});
 }
+
+export async function removeProject(projectId: string) {
+  return await get(`/project/delete?projectId=${projectId}`);
+}

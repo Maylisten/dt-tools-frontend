@@ -3,7 +3,7 @@
     <div class="text-2xl  mb-10">社会治理场景列表</div>
     <div class="w-full flex flex-wrap gap-10">
       <ProjectItem v-for="project of projects" :key="project.id" :id="project.id" :name="project.name"
-                   @click="handleItemClick"/>
+                   @go="handleItemGo" @remove="handleItemRemove"/>
       <ProjectAddButton/>
     </div>
   </div>
@@ -18,12 +18,16 @@ import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 
 const projectStore = useProjectStore();
-const {setCurrentProjectId, updateProjects} = projectStore;
+const {setCurrentProjectId, updateProjects, removeProject} = projectStore;
 const {projects} = storeToRefs(projectStore);
 const router = useRouter();
 
-const handleItemClick = async (id: string) => {
+const handleItemGo = async (id: string) => {
   await router.push({path: "/process/flow", query: {projectId: id}});
+};
+
+const handleItemRemove = async (id: string) => {
+  await removeProject(id);
 };
 
 const clearCurrentProject = () => {
