@@ -25,6 +25,27 @@ export function initGraph() {
   graph = new Graph({
     container: graphContainer!,
     grid: true,
+    onEdgeLabelRendered: (args) => {
+      const {selectors} = args;
+      const content = selectors.foContent as HTMLDivElement;
+      if (content) {
+        const btn = document.createElement('button');
+        btn.appendChild(document.createTextNode('HTML Button'));
+        btn.style.width = '100%';
+        btn.style.height = '100%';
+        btn.style.lineHeight = '1';
+        btn.style.borderRadius = '4px';
+        btn.style.textAlign = 'center';
+        btn.style.color = '#000';
+        btn.style.background = '#ffd591';
+        btn.style.border = '2px solid #ffa940';
+        btn.addEventListener('click', () => {
+          alert('clicked');
+        });
+        content.appendChild(btn);
+      }
+      return undefined;
+    },
     mousewheel: {
       enabled: true,
       zoomAtMousePosition: true,
@@ -57,8 +78,29 @@ export function initGraph() {
                 width: 12,
                 height: 8,
               },
+              // label: {
+              //   text: '默认标签', // 标签文字
+              //   fill: '#000', // 标签颜色
+              //   fontSize: 12, // 标签字体大小
+              //   textAnchor: 'middle', // 水平对齐
+              //   textVerticalAnchor: 'middle', // 垂直对齐
+              //   refX: 0.5, // 标签位置（中间）
+              //   refY: -10, // 标签垂直偏移
+              // },
             },
           },
+          // labels: [
+          //   {
+          //     attrs: {
+          //       line: {
+          //         stroke: '#73d13d',
+          //       },
+          //       text: {
+          //         text: 'Custom Label',
+          //       },
+          //     },
+          //   },
+          // ],
           zIndex: 0,
         });
       },
@@ -112,14 +154,14 @@ export function initGraph() {
         title: '基础流程图',
         name: 'group1',
       },
-      {
-        title: '系统设计图',
-        name: 'group2',
-        graphHeight: 250,
-        layoutOptions: {
-          rowHeight: 70,
-        },
-      },
+      // {
+      //     title: '系统设计图',
+      //     name: 'group2',
+      //     graphHeight: 250,
+      //     layoutOptions: {
+      //     rowHeight: 70,
+      //     },
+      // },
     ],
     layoutOptions: {
       columns: 2,
@@ -129,7 +171,7 @@ export function initGraph() {
   });
 
   stencilContainer!.appendChild(stencil.container);
-  console.log(stencilContainer);
+  // console.log(stencilContainer)
   //初始化stencil结束
 
   initKeyBoard();
@@ -532,7 +574,7 @@ async function initKeyBoard() {
       },
     }),
   );
-  stencil.load(imageNodes, 'group2');
+  // stencil.load(imageNodes, 'group2')
   // #endregion
 
   const projectStore = useProjectStore();
@@ -544,6 +586,5 @@ async function initKeyBoard() {
 
   graph.fromJSON(graphData);
 
-  // console.log('Graph Data:', graphData);
 }
 

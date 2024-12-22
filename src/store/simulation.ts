@@ -1,12 +1,22 @@
-import {defineStore} from "pinia";
+import {defineStore, storeToRefs} from "pinia";
 import {computed, ref} from "vue";
 import * as Cesium from "cesium";
 import {SimulationEditMode} from "@/types/SimulationEditMode.ts";
-import {Area, Line, Path, PathPoint, Point} from "@/types/SimulationEntities.ts";
+import {PathPoint} from "@/types/SimulationEntities.ts";
 import _ from "lodash";
 import {v1 as uuid} from "uuid";
+import {
+  useSimulationAreas,
+  useSimulationLines,
+  useSimulationPaths,
+  useSimulationPoints
+} from "@/hooks/useSimulationEntitiesStore.ts";
+import {useProjectStore} from "@/store/project.ts";
 
 export const useSimulationStore = defineStore("simulation", () => {
+  const projectStore = useProjectStore();
+  const {currentProjectId} = storeToRefs(projectStore);
+
   const interval = ref<[Date, Date]>([new Date(), new Date(new Date().getTime() + 30 * 60 * 1000)]);
   const julianDateInterval = computed(() => interval.value.map(t => Cesium.JulianDate.fromDate(t)) as [Cesium.JulianDate, Cesium.JulianDate]);
   const setInterval = (value: [Date, Date]) => {
@@ -36,10 +46,10 @@ export const useSimulationStore = defineStore("simulation", () => {
     editingMode.value = SimulationEditMode.NONE;
   };
 
-  const points = ref<Point[]>([]);
-  const lines = ref<Line[]>([]);
-  const areas = ref<Area[]>([]);
-  const paths = ref<Path[]>([]);
+  const points = useSimulationPoints(currentProjectId.value!);
+  const lines = useSimulationLines(currentProjectId.value!);
+  const areas = useSimulationAreas(currentProjectId.value!);
+  const paths = useSimulationPaths(currentProjectId.value!);
 
   const createPoint = (position: [number, number, number]) => {
     points.value.push({

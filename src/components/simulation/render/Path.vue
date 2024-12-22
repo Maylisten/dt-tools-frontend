@@ -1,7 +1,9 @@
 <template>
   <div v-show="available" class="absolute w-full h-full top-0 left-0">
-    <PathPoint v-for="point of pathCartesian3Points" :key="point.time.getTime()" :position="point.position"
-               :time="point.time"/>
+    <template v-if="available">
+      <PathPoint v-for="point of pathCartesian3Points" :key="point.time.getTime()" :position="point.position"
+                 :time="point.time"/>
+    </template>
   </div>
 </template>
 

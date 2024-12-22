@@ -1,6 +1,11 @@
 <template>
   <div class="absolute w-full h-full top-0 left-0">
-    <LabelPoi :label="formatDate(time)" :position="cartesian2Position"/>
+    <LabelPoi :position="cartesian2Position" width="200px">
+      <template #default>
+        <FlagIcon class="mr-2"/>
+        {{ formatDate(time) }}
+      </template>
+    </LabelPoi>
   </div>
 </template>
 
@@ -9,6 +14,7 @@ import {inject, onMounted, onUnmounted, shallowRef, toRefs} from "vue";
 import {BaseCesiumScene} from "@/components/simulation/entity/BaseCesiumScene.ts";
 import * as Cesium from "cesium";
 import LabelPoi from "@/components/simulation/render/poi/LabelPoi.vue";
+import FlagIcon from "@/components/icons/FlagIcon.vue";
 import {formatDate} from "@/utils";
 
 type Props = {
@@ -19,12 +25,11 @@ const props = defineProps<Props>();
 const {position, time} = toRefs(props);
 
 const baseScene = inject("baseScene") as BaseCesiumScene;
-const cartesian3Position = shallowRef<Cesium.Cartesian3>(position.value);
 const cartesian2Position = shallowRef<Cesium.Cartesian2>(new Cesium.Cartesian2());
 
 const point = new Cesium.Entity({
   // 设置点的位置 (经度、纬度、高度)
-  position: new Cesium.CallbackPositionProperty(() => cartesian3Position.value, false),
+  position: new Cesium.CallbackPositionProperty(() => position.value, false),
   point: {
     pixelSize: 8,        // 点的大小
     color: Cesium.Color.WHITE, // 点的颜色

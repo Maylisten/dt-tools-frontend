@@ -4,6 +4,7 @@
       :style="positionStyle"
   >
     <div> {{ label }}</div>
+    <slot></slot>
     <div class="triangle"></div>
   </div>
 </template>
@@ -12,14 +13,19 @@
 import {computed, toRefs} from "vue";
 
 type Props = {
-  label: string,
+  label?: string,
   position: { x: number, y: number },
+  width?: string
 }
 
 const props = defineProps<Props>();
-const {label, position} = toRefs(props);
+const {label, position, width} = toRefs(props);
 
-const positionStyle = computed(() => ({left: `${position.value.x}px`, top: `${position.value.y - 30}px`}));
+const positionStyle = computed(() => ({
+  left: `${position.value.x}px`,
+  top: `${position.value.y - 30}px`,
+  "min-width": width.value
+}));
 </script>
 
 <style scoped lang="less">

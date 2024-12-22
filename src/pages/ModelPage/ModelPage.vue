@@ -65,10 +65,47 @@
         </el-col>
       </el-row>
 
-      <el-button type="primary" @click="tojson" class="action-button">保存页面</el-button>
+      <el-row :gutter="20" class="button-row">
+        <el-col :span="12">
+          <el-button type="primary" @click="tojson" class="action-button">保存页面</el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-button type="danger" @click="deleteCurrentNode" class="action-button">删除当前结点</el-button>
+        </el-col>
+      </el-row>
+
+      <el-button type="primary" @click="changeLabel" class="action-button">修改label值</el-button>
 
     </div>
   </div>
+
+  <el-dialog
+      v-model="showEdgeDialog"
+      title="更新边标签"
+      :before-close="closeEdgeDialog"
+  >
+    <el-input v-model="edgeLabel" placeholder="请输入新的标签"/>
+    <template #footer>
+      <el-button @click="closeEdgeDialog">取消</el-button>
+      <el-button type="primary" @click="updateEdgeLabel">确定</el-button>
+    </template>
+  </el-dialog>
+
+  <el-dialog
+      v-model="showDialog"
+      title="请输入节点 Label"
+      width="30%"
+      :close-on-click-modal="false"
+  >
+    <el-input
+        v-model="nodeLabel"
+        placeholder="请输入节点的 Label"
+    ></el-input>
+    <template #footer>
+      <el-button @click="cancel">取消</el-button>
+      <el-button type="primary" @click="confirm">确认</el-button>
+    </template>
+  </el-dialog>
 
 </template>
 <!-- 左边边栏设置按钮，点击以后获取画布，在画布里面添加节点内容,然后可以互相连线，导出 -->
@@ -81,6 +118,97 @@ import {EditPen} from '@element-plus/icons-vue';
 import {post} from '@/utils/axios.ts';
 import {useProjectStore} from "@/store";
 import {storeToRefs} from "pinia";
+
+// 边的相关数据
+const showEdgeDialog = ref(false); // 控制对话框显示
+const edgeLabel = ref(''); // 保存用户输入的标签
+let currentEdge = ref(); // 当前点击的边
+
+function deleteCurrentNode() {
+  const cells = graph.getSelectedCells();
+  if (cells.length) {
+    graph.removeCells(cells);
+  }
+  tojson();
+
+}
+
+function changeLabel() {
+  const cells = graph.getSelectedCells();
+  console.log(cells);
+  if (cells.length) {
+    cells.forEach((cell) => {
+      if (cell.isNode()) {
+        // 如果是节点，则修改其 Label
+        const newLabel = prompt("请输入新的 Label:", cell.attr("text/text")); // 弹窗输入新的 Label
+        if (newLabel) {
+          cell.attr("text/text", newLabel); // 设置新的 Label
+        }
+      }
+    });
+  }
+
+  tojson();
+
+}
+
+function openEdgeDialog(edge) {
+  currentEdge.value = edge; // 保存当前边
+  console.log(currentEdge.value.getLabels());
+  let labels = currentEdge.value.getLabels();
+  edgeLabel.value = labels[0]?.attrs?.text?.text || labels[0]?.attrs?.label?.text || ''; // 预填充当前标签// 预填充当前标签
+  showEdgeDialog.value = true; // 显示对话框
+}
+
+// 关闭对话框
+function closeEdgeDialog() {
+  showEdgeDialog.value = false;
+  currentEdge.value = null; // 清空当前边
+}
+
+// 更新边的标签
+function updateEdgeLabel() {
+  if (currentEdge && edgeLabel.value) {
+    currentEdge.value.setLabelAt(
+        0, edgeLabel.value
+    ); // 更新标签
+    closeEdgeDialog(); // 关闭对话框
+    tojson();
+  }
+}
+
+// 控制对话框显示
+const showDialog = ref(false);
+// 用户输入的 Label 值
+const nodeLabel = ref("");
+// 用于 Promise 的 resolve
+let resolvePromise: (value: string | null) => void;
+
+// 弹出对话框，获取用户输入
+function getLabelFromUser(): Promise<string | null> {
+  return new Promise((resolve) => {
+    resolvePromise = resolve; // 将 resolve 存储起来，用于 confirm 和 cancel 时调用
+    showDialog.value = true; // 显示对话框
+  });
+}
+
+// 用户点击确认
+function confirm() {
+  resolvePromise(nodeLabel.value); // 返回用户输入的值
+  resetDialog();
+}
+
+// 用户点击取消
+function cancel() {
+  resolvePromise(null); // 返回 null 表示用户取消操作
+  resetDialog();
+}
+
+// 重置对话框
+function resetDialog() {
+  showDialog.value = false; // 隐藏对话框
+  nodeLabel.value = ""; // 清空输入框内容
+}
 
 // 响应式数据
 const showPanel = ref(false); // 控制面板显示
@@ -122,6 +250,23 @@ function deleteKeyValue(key: string) {
 
 // 设置图形相关事件
 function setupGraphEvents() {
+
+  graph.on('node:added', async ({node}) => {
+    const label = await getLabelFromUser();
+    if (label) {
+      node.attr('text/text', label); // 设置用户输入的 label
+    }
+  });
+
+  graph.on('edge:click', ({edge}) => {
+    // edge.attr('line/stroke', '#FF0000'); // 高亮边的颜色
+    openEdgeDialog(edge);
+    // const newLabel = prompt('请输入新的标签内容:', 'Updated Label');
+    // if (newLabel) {
+    //     edge.attr('label/text', newLabel);
+    //     // edge.attr('line/stroke', '#A2B1C3'); // 恢复默认颜色
+    // }
+  });
 
   // 监听节点点击事件
   graph.on('node:click', ({node}) => {

@@ -1,10 +1,13 @@
 <template>
   <div class="absolute h-full w-full left-0 right-0 ">
-    <PathEditTip class="absolute left-0 top-0"/>
-    <PathParamsDialog v-model:start-time="startDatetime" v-model:interval="interval"/>
-    <LabelPoi :label="formatDate(mouseDatetime)" :position="mouseCartesian2Position"/>
-    <PathPoint v-for="point of pathCartesian3Points" :key="point.time.getTime()" :position="point.position"
-               :time="point.time"/>
+    <PathParamsDialog v-model:start-time="startDatetime" v-model:interval="interval"
+                      @onConfirm="handleParamsDialogConfirm"/>
+    <template v-if="paramsReady">
+      <PathEditTip class="absolute left-0 top-0"/>
+      <PathPoint :position="mouseCartesian3Position" :time="mouseDatetime"/>
+      <PathPoint v-for="point of pathCartesian3Points" :key="point.time.getTime()" :position="point.position"
+                 :time="point.time"/>
+    </template>
   </div>
 </template>
 
@@ -18,31 +21,24 @@ import {ElMessage} from "element-plus";
 import PathEditTip from "@/components/simulation/render/edit/path/PathEditTip.vue";
 import PathParamsDialog from "@/components/simulation/render/edit/path/PathParamsDialog.vue";
 import {storeToRefs} from "pinia";
-import LabelPoi from "@/components/simulation/render/poi/LabelPoi.vue";
-import {formatDate} from "@/utils";
 import PathPoint from "@/components/simulation/render/edit/path/PathPoint.vue";
 
 const simulationStore = useSimulationStore();
 const {createPath, exitEditingMode} = simulationStore;
 const {interval: sceneInterval} = storeToRefs(simulationStore);
 const startDatetime = ref(sceneInterval.value[0]);
-const interval = ref(2000);
+const interval = ref(10000);
+const paramsReady = ref(false);
+const handleParamsDialogConfirm = () => {
+  paramsReady.value = true;
+};
+
 const baseScene = inject("baseScene") as BaseCesiumScene;
 const mouseCartesian3Position = shallowRef<Cesium.Cartesian3>(new Cesium.Cartesian3());
 const mouseCartesian2Position = shallowRef<Cesium.Cartesian2>(new Cesium.Cartesian2());
 
 const pathCartesian3Points = ref<{ position: Cesium.Cartesian3, time: Date }[]>([]);
 const mouseDatetime = computed(() => new Date(startDatetime.value.getTime() + interval.value * pathCartesian3Points.value.length));
-
-const mousePoint = new Cesium.Entity({
-  // 设置点的位置 (经度、纬度、高度)
-  position: new Cesium.CallbackPositionProperty(() => mouseCartesian3Position.value, false),
-  point: {
-    pixelSize: 8,        // 点的大小
-    color: Cesium.Color.WHITE, // 点的颜色
-    heightReference: Cesium.HeightReference.CLAMP_TO_GROUND // 将点固定在地面上
-  }
-});
 
 const examplePath = new Cesium.Entity({
   polyline: {
@@ -54,12 +50,10 @@ const examplePath = new Cesium.Entity({
 });
 
 const addExamplePath = () => {
-  baseScene.viewer.entities.add(mousePoint);
   baseScene.viewer.entities.add(examplePath);
 };
 
 const removeExamplePath = () => {
-  baseScene.viewer.entities.remove(mousePoint);
   baseScene.viewer.entities.remove(examplePath);
 };
 

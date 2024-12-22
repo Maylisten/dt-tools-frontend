@@ -6,7 +6,7 @@
         <el-date-picker v-model="startTime" type="datetime" style="width: 100%"/>
       </el-form-item>
       <el-form-item label="节点间隔" required>
-        <el-input-number v-model="interval" :min="1000" :step="1000" style="width: 100%">
+        <el-input-number v-model="interval" :min="1000" :step="5000" style="width: 100%">
           <template #suffix>
             毫秒
           </template>
@@ -26,6 +26,7 @@
 import {ref} from "vue";
 import {useSimulationStore} from "@/store";
 
+const emit = defineEmits(["onConfirm"]);
 const simulationStore = useSimulationStore();
 const {exitEditingMode} = simulationStore;
 const startTime = defineModel<Date>("startTime");
@@ -35,6 +36,7 @@ const dialogVisible = ref(true);
 
 const handleConfirm = () => {
   dialogVisible.value = false;
+  emit("onConfirm");
 };
 
 const handleCancel = () => {
