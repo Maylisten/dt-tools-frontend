@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-        class="flex flex-row items-center w-full h-[60px] px-2 gap-2 text-base shadow border-b-2 border-gray-300 bg-gray-200">
+        class="flex flex-row items-center w-full h-[60px] px-2 gap-2 text-base shadow border-b-2 border-gray-400 bg-gray-300">
       <PoiIcon class="text-xl"/>
       <span>点</span>
       <AddButton class="ml-auto" @click="enterPointEditingMode"/>

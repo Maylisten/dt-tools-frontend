@@ -27,12 +27,15 @@ const baseScene = inject("baseScene") as BaseCesiumScene;
 const centerCartesian2Position = shallowRef<Cesium.Cartesian2>(new Cesium.Cartesian2());
 const cartesian3Positions = shallowRef<Cesium.Cartesian3[]>([]);
 
+const colorProperty = new Cesium.ColorMaterialProperty();
+colorProperty.color = new Cesium.CallbackProperty(() => Cesium.Color.fromCssColorString(data.value.color), false);
 const line = new Cesium.Entity({
+  id: data.value.id,
   polyline: {
     positions: new CallbackProperty(() => cartesian3Positions.value, false),
     clampToGround: true,
     width: 3,
-    material: Cesium.Color.BLUE,
+    material: colorProperty,
   },
 });
 

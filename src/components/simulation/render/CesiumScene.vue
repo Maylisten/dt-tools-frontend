@@ -5,11 +5,13 @@
         <EditingPoint v-if="editingMode === SimulationEditMode.POINT"/>
         <EditingLine v-else-if="editingMode === SimulationEditMode.LINE"/>
         <EditingArea v-else-if="editingMode === SimulationEditMode.AREA"/>
+        <EditingPath v-else-if="editingMode === SimulationEditMode.PATH"/>
       </div>
       <div class="absolute pointer-events-none h-full w-full top-0 left-0 z-10">
         <Point v-for="point of points" :key="point.id" :data="point"/>
         <Line v-for="line of lines" :key="line.id" :data="line"/>
         <Area v-for="area of areas" :key="area.id" :data="area"/>
+        <Path v-for="path of paths" :key="path.id" :data="path"/>
       </div>
     </div>
     <div :id="cesiumContainerId" class="absolute h-full w-full top-0 left-0 z-10"></div>
@@ -29,9 +31,11 @@ import {SimulationEditMode} from "@/types/SimulationEditMode.ts";
 import Point from "@/components/simulation/render/Point.vue";
 import Line from "@/components/simulation/render/Line.vue";
 import Area from "@/components/simulation/render/Area.vue";
+import EditingPath from "@/components/simulation/render/edit/path/EditingPath.vue";
+import Path from "@/components/simulation/render/Path.vue";
 
 const simulationStore = useSimulationStore();
-const {interval, julianDateInterval, editingMode, points, areas, lines} = storeToRefs(simulationStore);
+const {interval, julianDateInterval, editingMode, points, areas, lines, paths} = storeToRefs(simulationStore);
 const {setCurrentDate} = simulationStore;
 const cesiumContainerId = "simulation-cesium-container";
 let baseScene: BaseCesiumScene | undefined = undefined;
@@ -48,6 +52,7 @@ const updateCesiumClockRange = () => {
 
 const initCesiumScene = () => {
   baseScene = new BaseCesiumScene(cesiumContainerId);
+  (window as any).baseScene = baseScene;
   baseScene.flyToShandong(0);
   updateCesiumClockRange();
   const clock = baseScene.viewer.clock;

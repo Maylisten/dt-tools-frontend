@@ -106,3 +106,20 @@ export function replaceFileName(fileName: string, newName: string): string {
 export function getUrlByRelativePath(relativePath: string): string {
   return import.meta.env.VITE_APP_BASE_URL + relativePath;
 }
+
+export function formatDate(date: Date, format: string = 'yyyy-MM-dd HH:mm:ss'): string {
+  const map: { [key: string]: number } = {
+    'yyyy': date.getFullYear(),
+    'MM': date.getMonth() + 1,  // JavaScript 的月份从0开始
+    'dd': date.getDate(),
+    'HH': date.getHours(),
+    'mm': date.getMinutes(),
+    'ss': date.getSeconds(),
+  };
+
+  return format.replace(/yyyy|MM|dd|HH|mm|ss/g, (matched) => {
+    const value = map[matched];
+    // Ensure two digits for MM, dd, HH, mm, ss
+    return value < 10 ? `0${value}` : `${value}`;
+  });
+}

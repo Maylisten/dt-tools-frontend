@@ -20,9 +20,6 @@
                 placeholder="选择消失时间"
             />
           </el-form-item>
-          <el-form-item label="颜色" class="p-2" style="margin-bottom: 0">
-            <el-color-picker v-model="data.color"/>
-          </el-form-item>
           <el-form-item class="p-2" style="margin-bottom: 0">
             <el-button type="primary" size="small" style="width: 100%" @click="zoomIn">定位</el-button>
           </el-form-item>
@@ -40,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import {Point} from "@/types/SimulationEntities.ts";
+import {Path} from "@/types/SimulationEntities.ts";
 import {toRefs} from "vue";
 import CollapseItem from "@/components/CollapseItem.vue";
 import {useSimulationStore} from "@/store";
@@ -49,23 +46,24 @@ import ClickEditLabel from "@/components/ClickEditLabel.vue";
 import {BaseCesiumScene} from "@/components/simulation/entity/BaseCesiumScene.ts";
 
 type Props = {
-  data: Point
+  data: Path
 }
 const props = defineProps<Props>();
 const {data} = toRefs(props);
 
 const simulationStore = useSimulationStore();
 const {interval} = storeToRefs(simulationStore);
-const {removePointById} = simulationStore;
+const {removePathById} = simulationStore;
 
 const onDelete = () => {
-  removePointById(data.value.id);
+  removePathById(data.value.id);
 };
 
 const zoomIn = () => {
   const baseScene = (window as any).baseScene as BaseCesiumScene;
   const viewer = baseScene.viewer;
   const foundEntity = baseScene.viewer.entities.getById(data.value.id);
+  console.log(foundEntity);
   if (foundEntity) {
     viewer.flyTo(foundEntity, {duration: 1});
   } else {

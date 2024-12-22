@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <PointList/>
-    <LineList/>
-    <AreaList/>
-    <PathList/>
+  <div class="h-full w-full overflow-hidden">
+    <el-scrollbar>
+      <PointList/>
+      <LineList/>
+      <AreaList/>
+      <PathList/>
+    </el-scrollbar>
   </div>
 </template>
 

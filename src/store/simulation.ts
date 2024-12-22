@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {computed, ref} from "vue";
 import * as Cesium from "cesium";
 import {SimulationEditMode} from "@/types/SimulationEditMode.ts";
-import {Area, Line, Point} from "@/types/SimulationEntities.ts";
+import {Area, Line, Path, PathPoint, Point} from "@/types/SimulationEntities.ts";
 import _ from "lodash";
 import {v1 as uuid} from "uuid";
 
@@ -29,6 +29,9 @@ export const useSimulationStore = defineStore("simulation", () => {
   const enterAreaEditingMode = () => {
     editingMode.value = SimulationEditMode.AREA;
   };
+  const enterPathEditingMode = () => {
+    editingMode.value = SimulationEditMode.PATH;
+  };
   const exitEditingMode = () => {
     editingMode.value = SimulationEditMode.NONE;
   };
@@ -36,17 +39,62 @@ export const useSimulationStore = defineStore("simulation", () => {
   const points = ref<Point[]>([]);
   const lines = ref<Line[]>([]);
   const areas = ref<Area[]>([]);
+  const paths = ref<Path[]>([]);
 
   const createPoint = (position: [number, number, number]) => {
-    points.value.push({id: uuid(), label: "新建点", position, availability: _.cloneDeep(interval.value)});
+    points.value.push({
+      id: uuid(),
+      label: "新建点",
+      position,
+      availability: _.cloneDeep(interval.value),
+      color: "#0000F5"
+    });
   };
 
   const createLine = (positions: [number, number, number][]) => {
-    lines.value.push({id: uuid(), label: "新建线", positions, availability: _.cloneDeep(interval.value)});
+    lines.value.push({
+      id: uuid(),
+      label: "新建线",
+      positions,
+      availability: _.cloneDeep(interval.value),
+      color: "#0000F5"
+    });
   };
 
   const createArea = (positions: [number, number, number][]) => {
-    areas.value.push({id: uuid(), label: "新建面", positions, availability: _.cloneDeep(interval.value)});
+    areas.value.push({
+      id: uuid(),
+      label: "新建面",
+      positions,
+      availability: _.cloneDeep(interval.value),
+      color: "#0000F5"
+    });
+  };
+
+  const createPath = (points: PathPoint[]) => {
+    console.log(points);
+    paths.value.push({
+      id: uuid(),
+      label: "新建路径",
+      points,
+      availability: _.cloneDeep(interval.value),
+    });
+  };
+
+  const removePointById = (id: string) => {
+    points.value = points.value.filter(p => p.id !== id);
+  };
+
+  const removeLineById = (id: string) => {
+    lines.value = lines.value.filter(p => p.id !== id);
+  };
+
+  const removeAreaById = (id: string) => {
+    areas.value = areas.value.filter(p => p.id !== id);
+  };
+
+  const removePathById = (id: string) => {
+    paths.value = paths.value.filter(p => p.id !== id);
   };
 
   return {
@@ -60,13 +108,19 @@ export const useSimulationStore = defineStore("simulation", () => {
     points,
     lines,
     areas,
+    paths,
     createPoint,
     createLine,
     createArea,
+    createPath,
+    removePointById,
+    removeLineById,
+    removeAreaById,
+    removePathById,
     enterPointEditingMode,
     enterLineEditingMode,
     enterAreaEditingMode,
-    exitEditingMode,
-  }
-    ;
+    enterPathEditingMode,
+    exitEditingMode
+  };
 });

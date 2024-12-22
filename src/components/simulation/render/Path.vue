@@ -1,21 +1,21 @@
 <template>
   <div v-show="available" class="absolute w-full h-full top-0 left-0">
-    <LabelPoi :label="data.label" :position="centerCartesian2Position"/>
+    <PathPoint v-for="point of pathCartesian3Points" :key="point.time.getTime()" :position="point.position"
+               :time="point.time"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, onUnmounted, ref, shallowRef, toRefs} from "vue";
-import {Area} from "@/types/SimulationEntities.ts";
+import {computed, inject, onMounted, onUnmounted, ref, shallowRef, toRefs} from "vue";
+import {Path} from "@/types/SimulationEntities.ts";
 import {BaseCesiumScene} from "@/components/simulation/entity/BaseCesiumScene.ts";
 import * as Cesium from "cesium";
-import {CallbackProperty} from "cesium";
 import {useSimulationStore} from "@/store";
 import {storeToRefs} from "pinia";
-import LabelPoi from "@/components/simulation/render/poi/LabelPoi.vue";
+import PathPoint from "@/components/simulation/render/edit/path/PathPoint.vue";
 
 type Props = {
-  data: Area
+  data: Path
 }
 const props = defineProps<Props>();
 const {data} = toRefs(props);
@@ -26,36 +26,45 @@ const available = ref(true);
 const baseScene = inject("baseScene") as BaseCesiumScene;
 const centerCartesian2Position = shallowRef<Cesium.Cartesian2>(new Cesium.Cartesian2());
 const cartesian3Positions = shallowRef<Cesium.Cartesian3[]>([]);
+const pathCartesian3Points = computed(() => data.value.points.map(point => ({
+  time: point.time,
+  position: baseScene.cartographicToCartesian3(Cesium.Cartographic.fromRadians(...point.position))
+})));
 
-const colorProperty = new Cesium.ColorMaterialProperty();
-colorProperty.color = new Cesium.CallbackProperty(() => Cesium.Color.fromCssColorString(data.value.color).withAlpha(0.5), false);
-const area = new Cesium.Entity({
-  id: data.value.id,
-  polyline: {
-    positions: new CallbackProperty(() => [...cartesian3Positions.value, cartesian3Positions.value[0]], false),
-    clampToGround: true,
-    width: 3,
-    material: Cesium.Color.WHITE,
-  },
-  polygon: {
-    hierarchy: new CallbackProperty(() => ({
-      positions: cartesian3Positions.value,
-    }), false), // 设置多边形的顶点
-    material: colorProperty,
-    outline: false, // 是否显示边框
-  }
+const sampledPositions = new Cesium.SampledPositionProperty();
+pathCartesian3Points.value.forEach(point => {
+  sampledPositions.addSample(Cesium.JulianDate.fromDate(point.time), point.position);
 });
 
-const addArea = () => {
-  baseScene.viewer.entities.add(area);
+const path = new Cesium.Entity({
+  id: data.value.id,
+  position: sampledPositions,
+  point: {
+    pixelSize: 16,        // 点的大小
+    color: Cesium.Color.BLUE, // 点的颜色
+    outlineColor: Cesium.Color.WHITE, // 边缘颜色
+    outlineWidth: 2,      // 边缘宽度
+    heightReference: Cesium.HeightReference.CLAMP_TO_GROUND // 将点固定在地面上
+  },
+  path: {
+    material: Cesium.Color.WHITE,
+    width: 2,
+    leadTime: 10000,
+    trailTime: 10000,
+  },
+  orientation: new Cesium.VelocityOrientationProperty(sampledPositions),
+});
+
+const addPath = () => {
+  baseScene.viewer.entities.add(path);
 };
 
-const removeArea = () => {
-  baseScene.viewer.entities.remove(area);
+const removePath = () => {
+  baseScene.viewer.entities.remove(path);
 };
 
 const update = () => {
-  const radianPositions = data.value.positions;
+  const radianPositions = data.value.points.map(point => point.position);
   cartesian3Positions.value = radianPositions.map(radians => baseScene.cartographicToCartesian3(Cesium.Cartographic.fromRadians(...radians)));
   const centerCartesian3 = baseScene.getCartesian3sCenter(cartesian3Positions.value);
   const centerCartesian2 = baseScene.cartesian3ToScreen(centerCartesian3);
@@ -67,7 +76,7 @@ const update = () => {
   // 检查是否在有效时间内
   const currentTimeStamp = currentDate.value.getTime();
   available.value = currentTimeStamp >= data.value.availability[0].getTime() && currentTimeStamp <= data.value.availability[1].getTime();
-  area.show = available.value;
+  path.show = available.value;
 };
 
 const addPostRenderListeners = () => {
@@ -81,13 +90,13 @@ const removePostRenderListeners = () => {
 };
 
 onMounted(() => {
-  addArea();
+  addPath();
   addPostRenderListeners();
 });
 
 onUnmounted(() => {
   removePostRenderListeners();
-  removeArea();
+  removePath();
 });
 
 </script>
