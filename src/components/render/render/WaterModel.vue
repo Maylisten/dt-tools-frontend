@@ -25,7 +25,7 @@ const updateModelStatus = () => {
   if (!baseScene || !object) {
     return;
   }
-
+  object.name = model.value.id;
   object.material.uniforms['time'].value += 1.0 / 60.0;
   object.position.set(...config.value.position);
   object.geometry = new PlaneGeometry(config.value.size[0], config.value.size[1]);

@@ -110,12 +110,12 @@ import {ElButton, ElLoading, ElTabPane, ElTabs, ElUpload} from 'element-plus';
 import {nextTick, ref} from 'vue';
 import type {LoadingInstance} from 'element-plus/lib/components/loading/src/loading.d';
 
-const videoPath = '/public/违停录屏.mp4';
+const videoPath = '/output.mp4';
 
-const outputImage1 = '/public/images/outputimage0.jpg';
-const outputImage2 = '/public/images/outputimage1.jpg';
-const outputImage3 = '/public/images/outputimage2.jpg';
-const wordPreviewIcon = '/public/icon.png'; // 使用import引入图片
+const outputImage1 = '/images/outputimage0.jpg';
+const outputImage2 = '/images/outputimage1.jpg';
+const outputImage3 = '/images/outputimage2.jpg';
+const wordPreviewIcon = '/icon.png'; // 使用import引入图片
 
 const fileList = ref([]);
 const previewUrl = ref(null);

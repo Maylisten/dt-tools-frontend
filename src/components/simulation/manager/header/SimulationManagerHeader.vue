@@ -4,6 +4,7 @@
       <div class="h-full flex justify-center items-center font-bold">实体列表</div>
       <div class="flex flex-row gap-1 items-center">
         <el-button-group>
+          <LogButton/>
           <ExportButton/>
         </el-button-group>
       </div>
@@ -19,6 +20,7 @@
 
 import ExportButton from "@/components/simulation/manager/header/ExportButton.vue";
 import DatePicker from "@/components/simulation/manager/header/DatePicker.vue";
+import LogButton from "@/components/simulation/manager/header/LogButton.vue";
 </script>
 
 <style scoped lang="less">

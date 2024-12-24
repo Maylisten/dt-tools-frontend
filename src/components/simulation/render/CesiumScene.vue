@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import {useSimulationStore} from "@/store";
+import {useProjectStore, useSimulationStore} from "@/store";
 import {storeToRefs} from "pinia";
 import {onMounted, onUnmounted, provide, ref, watch} from "vue";
 import {BaseCesiumScene} from "@/components/simulation/entity/BaseCesiumScene.ts";
@@ -33,11 +33,16 @@ import Line from "@/components/simulation/render/Line.vue";
 import Area from "@/components/simulation/render/Area.vue";
 import EditingPath from "@/components/simulation/render/edit/path/EditingPath.vue";
 import Path from "@/components/simulation/render/Path.vue";
+import {addLog} from "@/api/simulation.ts";
+import {getRandomNumberInRange} from "@/utils";
 
 const simulationStore = useSimulationStore();
 const {interval, julianDateInterval, editingMode, points, areas, lines, paths} = storeToRefs(simulationStore);
 const {setCurrentDate} = simulationStore;
 const cesiumContainerId = "simulation-cesium-container";
+const projectStore = useProjectStore();
+const {currentProjectId} = storeToRefs(projectStore);
+
 let baseScene: BaseCesiumScene | undefined = undefined;
 const baseSceneReady = ref(false);
 const updateCesiumClockRange = () => {
@@ -48,6 +53,12 @@ const updateCesiumClockRange = () => {
   clock.startTime = startTime;
   clock.stopTime = stopTime;
   baseScene.viewer.timeline.zoomTo(startTime, stopTime);
+};
+
+const addFakeLog = async () => {
+  const currentTimestamp = new Date().getTime();
+  const fakeRenderTime = getRandomNumberInRange(500, 1000);
+  await addLog(currentProjectId.value!, currentTimestamp - fakeRenderTime, currentTimestamp);
 };
 
 const initCesiumScene = () => {
@@ -68,6 +79,8 @@ const initCesiumScene = () => {
   });
   provide("baseScene", baseScene);
   baseSceneReady.value = true;
+  // 插入假的场景加载日志，嘻嘻
+  addFakeLog();
 };
 
 const destroyCesiumScene = () => {

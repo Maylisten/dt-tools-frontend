@@ -37,6 +37,7 @@ const updateModelStatus = () => {
 const initModel = async () => {
   particleFire = new Particle(options);
   const particleSystem = particleFire.particleSystem as Points;
+  particleSystem.name = model.value.id;
   baseScene.add(particleSystem);
   baseScene.addRenderCallback(updateModelStatus);
 };

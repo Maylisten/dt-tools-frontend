@@ -24,6 +24,7 @@ const updateModelStatus = () => {
     return;
   }
   const config = model.value.config as ObjConfig;
+  object.name = model.value.id;
   object.position.set(...config.position);
   object.rotation.set(...(config.rotation.map(degree => degreesToRadians(degree)) as [number, number, number]));
   object.scale.set(config.size, config.size, config.size);

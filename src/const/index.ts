@@ -2,10 +2,12 @@ import {Step} from "@/types/Process.ts";
 import {FlameConfig, GlbConfig, GltfConfig, ModelConfigMap, ModelType, ObjConfig, WaterConfig} from "@/types/Model.ts";
 
 export const STEP_LABEL_MAP = {
-  [Step.DataCleaning]: '数据清洗',
-  [Step.DataTransformation]: '数据转换',
-  [Step.DataCompression]: '数据压缩',
+  [Step.DataClean]: '数据清洗',
+  [Step.DataSample]: '数据采样',
   [Step.DataEncryption]: '数据加密',
+  [Step.DataDecryption]: '数据解密',
+  [Step.DataCompression]: '数据压缩'
+
 };
 
 export const MODEL_TYPE_LABEL_MAP = {

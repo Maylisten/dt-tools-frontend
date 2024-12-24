@@ -18,6 +18,7 @@ let scene = shallowRef<BaseScene | undefined>();
 onMounted(() => {
   scene.value = new BaseScene(container.value!);
   provide("scene", scene.value);
+  (window as any).baseScene = scene.value;
 });
 
 onUnmounted(() => {

@@ -1,5 +1,5 @@
 import {get, post} from "@/utils/axios.ts";
-import {Area, Line, Path, Point} from "@/types/SimulationEntities.ts";
+import {Area, Line, Log, Path, Point} from "@/types/SimulationEntities.ts";
 
 export async function listSimulationPoints(projectId: string) {
   return await get<Point[]>(`/simulation/point/list?projectId=${projectId}`);
@@ -31,5 +31,13 @@ export async function setSimulationAreas(projectId: string, areas: Area[]) {
 
 export async function setSimulationPaths(projectId: string, paths: Path[]) {
   return await post<Path[]>('/simulation/path/set', {projectId, paths});
+}
+
+export async function addLog(projectId: string, begin: number, end: number) {
+  return await get<Log[]>(`/simulation/log/add?projectId=${projectId}&begin=${begin}&end=${end}`);
+}
+
+export async function getLogs(projectId: string) {
+  return await get<Log[]>(`/simulation/logs?projectId=${projectId}`);
 }
 

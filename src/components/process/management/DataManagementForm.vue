@@ -57,7 +57,7 @@ const fetchFiles = async () => {
 // 下载文件
 const downloadFile = async (fileId: string, fileName: string) => {
   try {
-    const response = await axios.get(`/management/download`, {
+    const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}/management/download`, {
       params: {projectId: currentProjectId.value, fileId},
       responseType: "blob", // 接收二进制流
     });
@@ -156,7 +156,7 @@ onMounted(() => {
           <el-button
               type="primary"
               size="small"
-              @click="downloadFile(row.path, row.name)"
+              @click="downloadFile(row.id, row.name)"
           >
             下载
           </el-button>

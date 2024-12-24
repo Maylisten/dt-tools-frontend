@@ -9,7 +9,7 @@
         <el-form-item>
           <div class="w-full flex flex-row justify-end">
             <el-button type="primary" @click="onSubmit">创建</el-button>
-            <el-button @click="closeDialog">Cancel</el-button>
+            <el-button @click="closeDialog">取消</el-button>
           </div>
         </el-form-item>
       </el-form>

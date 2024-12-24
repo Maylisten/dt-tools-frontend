@@ -30,3 +30,10 @@ export interface Path extends SimulationEntity {
   points: PathPoint[],
   availability: [Date, Date],
 }
+
+export interface Log {
+  begin: number,
+  end: number,
+  message: string
+}
+

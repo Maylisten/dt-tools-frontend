@@ -7,8 +7,9 @@ export type Process = {
 }
 
 export enum Step {
-  DataCleaning = 'DataCleaning',
-  DataTransformation = 'DataTransformation',
-  DataCompression = 'DataCompression',
-  DataEncryption = 'DataEncryption'
+  DataClean = 'DataClean',
+  DataSample = "DataSample",
+  DataEncryption = 'DataEncryption',
+  DataDecryption = 'DataDecryption',
+  DataCompression = 'DataCompression'
 }

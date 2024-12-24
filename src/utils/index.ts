@@ -107,20 +107,24 @@ export function getUrlByRelativePath(relativePath: string): string {
   return import.meta.env.VITE_APP_BASE_URL + relativePath;
 }
 
-export function formatDate(date: Date, format: string = 'yyyy-MM-dd HH:mm:ss'): string {
-  const map: { [key: string]: number } = {
+export function formatDate(date: Date, format: string = 'yyyy-MM-dd HH:mm:ss.SSS'): string {
+  const map: { [key: string]: number | string } = {
     'yyyy': date.getFullYear(),
-    'MM': date.getMonth() + 1,  // JavaScript 的月份从0开始
+    'MM': date.getMonth() + 1,  // JavaScript 的月份从 0 开始
     'dd': date.getDate(),
     'HH': date.getHours(),
     'mm': date.getMinutes(),
     'ss': date.getSeconds(),
+    'SSS': date.getMilliseconds(), // 获取毫秒
   };
 
-  return format.replace(/yyyy|MM|dd|HH|mm|ss/g, (matched) => {
+  return format.replace(/yyyy|MM|dd|HH|mm|ss|SSS/g, (matched) => {
     const value = map[matched];
-    // Ensure two digits for MM, dd, HH, mm, ss
-    return value < 10 ? `0${value}` : `${value}`;
+    // 对于 SSS 保持三位数字，不需要补零；其他则补零到两位
+    if (matched === 'SSS') {
+      return value.toString().padStart(3, '0');
+    }
+    return (value as number) < 10 ? `0${value}` : `${value}`;
   });
 }
 
@@ -155,4 +159,11 @@ export function parseDatesInObject<T>(obj: T): T {
   }
 
   return parsedObj as T;
+}
+
+export function getRandomNumberInRange(min: number, max: number) {
+  if (min > max) {
+    throw new Error("最小值不能大于最大值");
+  }
+  return Math.random() * (max - min) + min;
 }
