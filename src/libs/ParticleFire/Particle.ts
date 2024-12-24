@@ -46,7 +46,7 @@ const TEXTURE_OPTIONS = [
 const DEFAULT_PARTICLE_SPAWN_SPEED = 1600;
 const WIND_LOCATION = new Three.Vector3(0, 1, 4);
 
-const ParticleOptions = {
+export const ParticleOptions = {
   size: {
     default: DEFAULT_SIZE,
     min: MINIMUM_SIZE,
@@ -108,6 +108,20 @@ interface Particle {
   size: number;
 }
 
+export const defaultParticleFireOption = {
+  size: DEFAULT_SIZE,
+  sizeVarience: DEFAULT_SIZE_VARIANCE,
+  speed: DEFAULT_SPEED,
+  speedVarience: DEFAULT_SPEED_VARIANCE,
+  fadingSpeed: DEFAULT_FADING_SPEED,
+  particleNum: DEFAULT_PARTICLE_NUM,
+  centrality: DEFAULT_CENTRALITY,
+  color: DEFAULT_RGB,
+  wind: false,
+  windStrength: 10,
+  texture: DEFAULT_TEXTURE_OPTION,
+};
+
 export default class ParticleFire {
   options: Record<string, any>;
   position: Float32Array;
@@ -126,20 +140,7 @@ export default class ParticleFire {
   particleSystem: Three.Points;
 
   constructor(options: Record<string, any>) {
-    this.options = {
-      size: DEFAULT_SIZE,
-      sizeVarience: DEFAULT_SIZE_VARIANCE,
-      speed: DEFAULT_SPEED,
-      speedVarience: DEFAULT_SPEED_VARIANCE,
-      fadingSpeed: DEFAULT_FADING_SPEED,
-      particleNum: DEFAULT_PARTICLE_NUM,
-      centrality: DEFAULT_CENTRALITY,
-      color: DEFAULT_RGB,
-      wind: false,
-      windStrength: 10,
-      texture: DEFAULT_TEXTURE_OPTION,
-    };
-
+    this.options = options ?? defaultParticleFireOption;
     this.bulkSetAttrs(options);
 
     this.position = new Float32Array(MAXIMUM_PARTICLE_NUM * 3);
@@ -163,7 +164,7 @@ export default class ParticleFire {
     this.geometry.setAttribute('size', new Three.BufferAttribute(this.size, 1));
     this.geometry.setAttribute('alpha', new Three.BufferAttribute(this.alpha, 1));
 
-    const texture = this.loadTexture(defaultTexture);
+    const texture = this.loadTexture(this.options.texture);
     texture.wrapS = Three.ClampToEdgeWrapping;
     texture.wrapT = Three.ClampToEdgeWrapping;
     texture.minFilter = Three.LinearFilter;
@@ -350,5 +351,3 @@ export default class ParticleFire {
     this.particleSystem.geometry.attributes.alpha.needsUpdate = true;
   }
 }
-
-export {ParticleOptions};

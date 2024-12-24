@@ -12,6 +12,7 @@
       <GltfItemEditor v-else-if="model.type === ModelType.GLTF" :value="model"/>
       <ObjItemEditor v-else-if="model.type === ModelType.OBJ" :value="model"/>
       <FlameItemEditor v-else-if="model.type === ModelType.FLAME" :value="model"/>
+      <SmokeItemEditor v-else-if="model.type === ModelType.SMOKE" :value="model"/>
       <WaterItemEditor v-else-if="model.type === ModelType.WATER" :value="model"/>
       <div>
         <el-popconfirm title="确定删除该模型吗？" @confirm="onDelete" width="200">
@@ -36,6 +37,7 @@ import WaterItemEditor from "@/components/render/manager/list/WaterItemEditor.vu
 import ModelTag from "@/components/render/ModelTag.vue";
 import {useRenderStore} from "@/store";
 import CollapseItem from "@/components/CollapseItem.vue";
+import SmokeItemEditor from "@/components/render/manager/list/SmokeItemEditor.vue";
 
 const renderStore = useRenderStore();
 const {removeModel} = renderStore;

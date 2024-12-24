@@ -24,6 +24,11 @@ export type FlameConfig = {
   position: [number, number, number];
 }
 
+export type SmokeConfig = {
+  position: [number, number, number];
+  size: number;
+}
+
 export type WaterConfig = {
   size: [number, number];
   position: [number, number, number];
@@ -37,6 +42,7 @@ export type ModelConfigMap = {
   [ModelType.OBJ]: ObjConfig;
   [ModelType.FLAME]: FlameConfig;
   [ModelType.WATER]: WaterConfig;
+  [ModelType.SMOKE]: SmokeConfig;
 };
 
 export enum ModelType {
@@ -44,7 +50,8 @@ export enum ModelType {
   GLTF = "GLTF",
   OBJ = "OBJ",
   FLAME = "FLAME",
-  WATER = "WATER"
+  WATER = "WATER",
+  SMOKE = "SMOKE"
 }
 
 export interface Model {

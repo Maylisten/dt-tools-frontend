@@ -18,15 +18,17 @@
             />
           </el-select>
         </el-form-item>
-        <GlbModelConfigFormItems ref="configFormRef" v-if="modelFormData.type === ModelType.GLB"
+        <GlbModelConfigFormItems v-if="modelFormData.type === ModelType.GLB"
                                  v-model="modelFormData.config as GlbConfig"/>
-        <GltfModelConfigFormItems ref="configFormRef" v-if="modelFormData.type === ModelType.GLTF"
+        <GltfModelConfigFormItems v-if="modelFormData.type === ModelType.GLTF"
                                   v-model="modelFormData.config as GltfConfig"/>
-        <ObjModelConfigFormItems ref="configFormRef" v-else-if="modelFormData.type === ModelType.OBJ"
+        <ObjModelConfigFormItems v-else-if="modelFormData.type === ModelType.OBJ"
                                  v-model="modelFormData.config as ObjConfig"/>
-        <FlameModelConfigFormItems ref="configFormRef" v-else-if="modelFormData.type === ModelType.FLAME"
+        <FlameModelConfigFormItems v-else-if="modelFormData.type === ModelType.FLAME"
                                    v-model="modelFormData.config as FlameConfig"/>
-        <WaterModelConfigFormItems ref="configFormRef" v-else-if="modelFormData.type === ModelType.WATER"
+        <SmokeModelConfigFormItems v-else-if="modelFormData.type === ModelType.SMOKE"
+                                   v-model="modelFormData.config as FlameConfig"/>
+        <WaterModelConfigFormItems v-else-if="modelFormData.type === ModelType.WATER"
                                    v-model="modelFormData.config as WaterConfig"/>
         <el-form-item>
           <div class="w-full flex flex-row justify-end">
@@ -52,6 +54,7 @@ import {ElMessage} from "element-plus";
 import {useRenderStore} from "@/store";
 import {v1 as uuid} from "uuid";
 import _ from "lodash";
+import SmokeModelConfigFormItems from "@/components/render/manager/add/SmokeModelConfigFormItems.vue";
 
 const renderStore = useRenderStore();
 const {addModel} = renderStore;
@@ -65,8 +68,6 @@ const typeSelectOptions: {
   value: value as ModelType, // 类型断言，将字符串值转换为 Step 枚举类型
   label: label,
 }));
-
-const configFormRef = ref();
 
 const defaultFormModel: Model = {
   id: "",

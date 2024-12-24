@@ -4,6 +4,7 @@
   <ObjModel v-else-if="model.type === ModelType.OBJ" :value="model"/>
   <WaterModel v-else-if="model.type === ModelType.WATER" :value="model"/>
   <FlameModel v-else-if="model.type === ModelType.FLAME" :value="model"/>
+  <SmokeModel v-else-if="model.type === ModelType.SMOKE" :value="model"/>
   <div v-else></div>
 </template>
 
@@ -15,6 +16,7 @@ import GlbModel from "@/components/render/render/GlbModel.vue";
 import ObjModel from "@/components/render/render/ObjModel.vue";
 import WaterModel from "@/components/render/render/WaterModel.vue";
 import FlameModel from "@/components/render/render/FlameModel.vue";
+import SmokeModel from "@/components/render/render/SmokeModel.vue";
 
 type Props = {
   data: Model
