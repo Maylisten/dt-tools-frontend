@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {Object3D, Scene, Vector3} from 'three';
+import {Object3D, Scene} from 'three';
 
 import Stats from 'three/addons/libs/stats.module.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -12,19 +12,17 @@ export class BaseScene {
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
-  // hemiLight: HemisphereLight;
-  // dirLight: THREE.DirectionalLight;
   floor: THREE.Mesh;
   controls: OrbitControls;
   stats: Stats;
   renderCallbacks: (() => void)[] = [];
   active: boolean = false;
-  sun: Vector3;
-  sky: Sky;
-  parameters = {
-    elevation: 6,
-    azimuth: 180
-  };
+  sun: THREE.Vector3 | undefined;
+  // sky: Sky;
+  // parameters = {
+  //   elevation: 6,
+  //   azimuth: 180
+  // };
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -32,12 +30,10 @@ export class BaseScene {
     this.scene = this.initScene();
     this.camera = this.initCamera(container);
     this.controls = this.initControls(this.renderer, this.camera);
-    // this.hemiLight = this.initHemiLight(this.scene);
-    // this.dirLight = this.initDirLight(this.scene);
     this.floor = this.initFloor(this.scene);
     this.stats = this.initStats(container);
-    this.sun = this.initSun();
-    this.sky = this.initSky(this.scene);
+    // this.sun = this.initSun();
+    // this.sky = this.initSky(this.scene);
     this.addWindowListeners();
     this.startAnimate();
     // this.initGui();
@@ -70,27 +66,6 @@ export class BaseScene {
     camera.position.set(0, 15, 15);
     camera.lookAt(0, 0, 0);
     return camera;
-  }
-
-  initHemiLight(scene: THREE.Scene) {
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 3);
-    hemiLight.position.set(0, 20, 0);
-    scene.add(hemiLight);
-    return hemiLight;
-  }
-
-  initDirLight(scene: THREE.Scene) {
-    const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-    dirLight.position.set(-3, 10, -10);
-    dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 2;
-    dirLight.shadow.camera.bottom = -2;
-    dirLight.shadow.camera.left = -2;
-    dirLight.shadow.camera.right = 2;
-    dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 40;
-    scene.add(dirLight);
-    return dirLight;
   }
 
   initFloor(scene: THREE.Scene) {
@@ -154,7 +129,7 @@ export class BaseScene {
     }
     this.stats.update();
     this.renderCallbacks.forEach(callback => callback());
-    this.updateSun();
+    // this.updateSun();
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -199,27 +174,27 @@ export class BaseScene {
     return sky;
   }
 
-  updateSun() {
-    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-    const sceneEnv = new THREE.Scene();
-
-    let renderTarget: THREE.WebGLRenderTarget | undefined;
-
-    const phi = THREE.MathUtils.degToRad(90 - this.parameters.elevation);
-    const theta = THREE.MathUtils.degToRad(this.parameters.azimuth);
-
-    this.sun.setFromSphericalCoords(1, phi, theta);
-
-    this.sky.material.uniforms['sunPosition'].value.copy(this.sun);
-
-    if (renderTarget !== undefined) {
-      renderTarget.dispose();
-    }
-    sceneEnv.add(this.sky);
-    renderTarget = pmremGenerator.fromScene(sceneEnv);
-    this.scene.add(this.sky);
-    this.scene.environment = renderTarget.texture;
-  }
+  // updateSun() {
+  //   const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+  //   const sceneEnv = new THREE.Scene();
+  //
+  //   let renderTarget: THREE.WebGLRenderTarget | undefined;
+  //
+  //   const phi = THREE.MathUtils.degToRad(90 - this.parameters.elevation);
+  //   const theta = THREE.MathUtils.degToRad(this.parameters.azimuth);
+  //
+  //   this.sun.setFromSphericalCoords(1, phi, theta);
+  //
+  //   this.sky.material.uniforms['sunPosition'].value.copy(this.sun);
+  //
+  //   if (renderTarget !== undefined) {
+  //     renderTarget.dispose();
+  //   }
+  //   sceneEnv.add(this.sky);
+  //   renderTarget = pmremGenerator.fromScene(sceneEnv);
+  //   this.scene.add(this.sky);
+  //   this.scene.environment = renderTarget.texture;
+  // }
 
   // initGui() {
   //   const gui = new GUI();

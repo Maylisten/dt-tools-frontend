@@ -22,13 +22,14 @@ let object: Water | undefined = undefined;
 const config = computed(() => model.value.config as WaterConfig);
 
 const updateModelStatus = () => {
-  if (!baseScene || !object) {
+  if (!baseScene || !object || !baseScene.sun) {
     return;
   }
   object.name = model.value.id;
   object.material.uniforms['time'].value += 1.0 / 60.0;
   object.position.set(...config.value.position);
   object.geometry = new PlaneGeometry(config.value.size[0], config.value.size[1]);
+  object.material.uniforms['sunDirection'].value.copy(baseScene.sun).normalize();
 };
 
 const initModel = async () => {
@@ -50,7 +51,6 @@ const initModel = async () => {
   );
 
   object.rotation.x = -Math.PI / 2;
-  object.material.uniforms['sunDirection'].value.copy(baseScene.sun).normalize();
   baseScene.add(object);
   updateModelStatus();
   baseScene.addRenderCallback(updateModelStatus);

@@ -8,6 +8,9 @@
         <ExportButton/>
       </div>
     </div>
+    <div class="p-1 border-2 m-1 shadow rounded">
+      <LightEditor/>
+    </div>
     <div class="relative w-full flex-1">
       <div class="absolute h-full w-full left-0 top-0 overflow-hidden">
         <ModelList/>
@@ -21,6 +24,7 @@
 import AddButton from "@/components/render/manager/add/AddButton.vue";
 import ModelList from "@/components/render/manager/list/ModelList.vue";
 import ExportButton from "@/components/render/manager/export/ExportButton.vue";
+import LightEditor from "@/components/render/manager/light/LightEditor.vue";
 </script>
 
 <style scoped lang="less">
