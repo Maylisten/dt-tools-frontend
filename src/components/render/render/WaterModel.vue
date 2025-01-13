@@ -6,7 +6,7 @@
 import {computed, inject, onMounted, onUnmounted, toRefs} from "vue";
 import {Model, WaterConfig} from "@/types/Model.ts";
 import {BaseScene} from "@/components/render/entity/BaseScene.ts";
-import {PlaneGeometry, RepeatWrapping, TextureLoader, Vector3} from "three";
+import {Clock, PlaneGeometry, RepeatWrapping, TextureLoader, Vector3} from "three";
 import {Water} from "three-stdlib";
 
 type Props = {
@@ -21,12 +21,14 @@ let object: Water | undefined = undefined;
 
 const config = computed(() => model.value.config as WaterConfig);
 
+const clock = new Clock();
 const updateModelStatus = () => {
   if (!baseScene || !object || !baseScene.sun) {
     return;
   }
   object.name = model.value.id;
-  object.material.uniforms['time'].value += 1.0 / 60.0;
+  const delta = clock.getDelta();
+  object.material.uniforms['time'].value += delta;
   object.position.set(...config.value.position);
   object.geometry = new PlaneGeometry(config.value.size[0], config.value.size[1]);
   object.material.uniforms['sunDirection'].value.copy(baseScene.sun).normalize();
@@ -39,7 +41,7 @@ const initModel = async () => {
       {
         textureWidth: 512,
         textureHeight: 512,
-        waterNormals: new TextureLoader().load('textures/waternormals.png', function (texture) {
+        waterNormals: new TextureLoader().load('textures/waternormals.jpg', function (texture) {
           texture.wrapS = texture.wrapT = RepeatWrapping;
         }),
         sunDirection: new Vector3(),
@@ -52,7 +54,6 @@ const initModel = async () => {
 
   object.rotation.x = -Math.PI / 2;
   baseScene.add(object);
-  updateModelStatus();
   baseScene.addRenderCallback(updateModelStatus);
 };
 

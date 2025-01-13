@@ -8,7 +8,7 @@ import {createPinia, setActivePinia} from "pinia";
 import DataProcessManagePage from "@/pages/process/DataProcessManagePage.vue";
 import DataProcessFlowPage from "@/pages/process/DataProcessFlowPage.vue";
 import TestPage from "@/pages/TestPage.vue";
-import ModelPage from "@/pages/ModelPage/ModelPage.vue";
+import ModelPage from "@/pages/ModelPage.vue";
 
 const routes: Readonly<RouteRecordRaw[]> = [
   {path: '/', redirect: "/project"},

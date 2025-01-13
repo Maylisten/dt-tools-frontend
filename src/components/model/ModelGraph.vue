@@ -135,7 +135,6 @@ function deleteCurrentNode() {
 
 function changeLabel() {
   const cells = graph.getSelectedCells();
-  console.log(cells);
   if (cells.length) {
     cells.forEach((cell) => {
       if (cell.isNode()) {
@@ -353,7 +352,7 @@ function closePanel() {
 
 #main-container {
   display: flex;
-  height: 100vh;
+  height: 100%;
   position: relative;
   border: 1px solid #dfe3e8;
 }
@@ -367,7 +366,7 @@ function closePanel() {
 }
 
 #graph-container {
-  width: calc(100% - 180px);
+  width: 100%;
   height: 100%;
   position: relative;
 }

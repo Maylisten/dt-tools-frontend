@@ -57,7 +57,7 @@ const updateCesiumClockRange = () => {
 
 const addFakeLog = async () => {
   const currentTimestamp = new Date().getTime();
-  const fakeRenderTime = getRandomNumberInRange(500, 1000);
+  const fakeRenderTime = getRandomNumberInRange(1000, 3000);
   await addLog(currentProjectId.value!, currentTimestamp - fakeRenderTime, currentTimestamp);
 };
 

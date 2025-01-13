@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import {inject, onMounted, onUnmounted} from "vue";
+import {inject, onMounted, onUnmounted, watch} from "vue";
 import {BaseScene} from "@/components/render/entity/BaseScene.ts";
 import * as THREE from "three";
 import {Sky} from 'three/addons/objects/Sky.js';
@@ -16,15 +16,14 @@ const {sunParams} = storeToRefs(renderStore);
 
 let sun: THREE.Vector3;
 let sky: Sky;
+let pmremGenerator: THREE.PMREMGenerator;
+let sceneEnv: THREE.Scene;
+let renderTarget: THREE.WebGLRenderTarget | undefined;
 
 const updateModelStatus = () => {
-  if (!baseScene || !sun || !sky) {
+  if (!baseScene || !sun || !sky || !pmremGenerator || !sceneEnv) {
     return;
   }
-  const pmremGenerator = new THREE.PMREMGenerator(baseScene.renderer);
-  const sceneEnv = new THREE.Scene();
-
-  let renderTarget: THREE.WebGLRenderTarget | undefined;
 
   const phi = THREE.MathUtils.degToRad(90 - sunParams.value.elevation);
   const theta = THREE.MathUtils.degToRad(sunParams.value.azimuth);
@@ -58,13 +57,21 @@ const initModel = async () => {
   skyUniforms['rayleigh'].value = 2;
   skyUniforms['mieCoefficient'].value = 0.005;
   skyUniforms['mieDirectionalG'].value = 0.8;
-  baseScene.addRenderCallback(updateModelStatus);
+
+  pmremGenerator = new THREE.PMREMGenerator(baseScene.renderer);
+  sceneEnv = new THREE.Scene();
+  updateModelStatus();
 };
 
 const destroyModel = () => {
-  baseScene.removeRenderCallback(updateModelStatus);
+  pmremGenerator.dispose();
+  sceneEnv.clear();
   baseScene.remove(sky);
 };
+
+watch(sunParams, () => {
+  updateModelStatus();
+}, {deep: true});
 
 onMounted(() => {
   initModel();
