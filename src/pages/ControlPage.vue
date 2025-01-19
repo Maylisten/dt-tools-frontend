@@ -161,7 +161,7 @@ const startProcessImage = async () => {
       text: '正在加载，请稍候...',
       background: 'rgba(0, 0, 0, 0.7)',
     });
-    const delay = Math.floor(Math.random() * (10 - 5 + 1) + 5) * 1000;
+    const delay = Math.floor(Math.random() * (3 - 1 + 1) + 1) * 1000;
     await new Promise((resolve) => setTimeout(resolve, delay));
     console.log("===================================================");
     const inputImageNameValue = inputImageName.value;
